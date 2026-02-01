@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import event_hub_api.dto.EventoRequestDTO;
 import event_hub_api.dto.EventoResponseDTO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +24,8 @@ public class EventoService {
 
     @Cacheable(value = "eventosAtivos")
     @Transactional(readOnly = true)
-    public List<EventoResponseDTO> listarTodosFuturos() {
-        return eventoRepository.findAllFuturos().stream()
+    public List<EventoResponseDTO> listarTodos() {
+        return eventoRepository.findAllByOrderByDataEventoAsc().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -36,6 +37,7 @@ public class EventoService {
                 .orElseThrow(() -> new BusinessException("Evento não encontrado."));
     }
 
+    @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
     public EventoResponseDTO criar(EventoRequestDTO dto) {
         if (dto.getDataEvento().toLocalDate().isBefore(java.time.LocalDate.now())) {
@@ -51,6 +53,7 @@ public class EventoService {
         return toDTO(salvo);
     }
 
+    @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
     public EventoResponseDTO atualizar(Long id, EventoRequestDTO dto) {
         EventoEntity entidade = eventoRepository.findById(id)
@@ -69,6 +72,7 @@ public class EventoService {
         return toDTO(salvo);
     }
 
+    @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
     public void deletar(Long id) {
         if (!eventoRepository.existsById(id)) {
