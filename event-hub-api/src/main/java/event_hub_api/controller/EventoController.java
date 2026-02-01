@@ -21,7 +21,7 @@ public class EventoController {
 
     @GetMapping
     public ResponseEntity<List<EventoResponseDTO>> listar() {
-        return ResponseEntity.ok(eventoService.listarTodosFuturos());
+        return ResponseEntity.ok(eventoService.listarTodos());
     }
 
     @GetMapping("/{id}")
