@@ -1,5 +1,6 @@
 package event_hub_api.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class EventoService {
     @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
     public EventoResponseDTO criar(EventoRequestDTO dto) {
-        if (dto.getDataEvento().toLocalDate().isBefore(java.time.LocalDate.now())) {
+        if (dto.getDataEvento().toLocalDate().isBefore(LocalDate.now())) {
             throw new BusinessException("A data do evento não pode ser anterior ao dia de hoje.");
         }
 
@@ -67,7 +68,6 @@ public class EventoService {
                     "A nova capacidade não pode ser menor que a quantidade de ingressos já vendidos (" + vendidos + ")."
             );
         }
-
         if (dto.getCapacidade() > entidade.getCapacidade()) {
             int diff = dto.getCapacidade() - entidade.getCapacidade();
             entidade.setVagasDisponiveis(entidade.getVagasDisponiveis() + diff);
@@ -81,7 +81,6 @@ public class EventoService {
 
         return toDTO(salvo);
     }
-
 
     @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
