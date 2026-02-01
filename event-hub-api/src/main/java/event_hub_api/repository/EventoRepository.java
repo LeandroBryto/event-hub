@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface EventoRepository extends JpaRepository<EventoEntity, Long> {
-    @Query("SELECT e FROM EventoEntity e WHERE e.dataEvento > CURRENT_TIMESTAMP")
-    List<EventoEntity> findAllFuturos();
+    //@Query("SELECT e FROM EventoEntity e ORDER BY e.dataEvento ASC")
+    List<EventoEntity> findAllByOrderByDataEventoAsc();
 }
