@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface EventoRepository extends JpaRepository<EventoEntity, Long> {
-    //@Query("SELECT e FROM EventoEntity e ORDER BY e.dataEvento ASC")
     List<EventoEntity> findAllByOrderByDataEventoAsc();
 }
