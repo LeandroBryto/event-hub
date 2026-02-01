@@ -56,21 +56,32 @@ public class EventoService {
     @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
     public EventoResponseDTO atualizar(Long id, EventoRequestDTO dto) {
+
         EventoEntity entidade = eventoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Evento não encontrado para atualização."));
 
-        BeanUtils.copyProperties(dto, entidade, "id", "vagasDisponiveis", "version", "dtGravacao", "ingressos");
+        int vendidos = entidade.getCapacidade() - entidade.getVagasDisponiveis();
 
-        if (dto.getCapacidade() != null && dto.getCapacidade() > entidade.getCapacidade()) {
+        if (dto.getCapacidade() < vendidos) {
+            throw new BusinessException(
+                    "A nova capacidade não pode ser menor que a quantidade de ingressos já vendidos (" + vendidos + ")."
+            );
+        }
+
+        if (dto.getCapacidade() > entidade.getCapacidade()) {
             int diff = dto.getCapacidade() - entidade.getCapacidade();
             entidade.setVagasDisponiveis(entidade.getVagasDisponiveis() + diff);
         }
+
+        BeanUtils.copyProperties(dto, entidade, "id", "vagasDisponiveis", "version", "dtGravacao", "ingressos");
+
         entidade.setCapacidade(dto.getCapacidade());
 
-
         EventoEntity salvo = eventoRepository.save(entidade);
+
         return toDTO(salvo);
     }
+
 
     @CacheEvict(value = "eventosAtivos", allEntries = true)
     @Transactional
