@@ -1,0 +1,83 @@
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <p-button label="Novo Evento" icon="pi pi-plus" class="mr-2" (onClick)="openNew()"></p-button>
+            <p-button label="Excluir Selecionados" icon="pi pi-trash" severity="danger" 
+                (onClick)="deleteSelectedEventos()" [disabled]="!selectedEventos || !selectedEventos.length"></p-button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="eventos" [rows]="10" [paginator]="true" [globalFilterFields]="['nome','local']" 
+        [(selection)]="selectedEventos" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} eventos" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Gerenciar Eventos</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+                <th pSortableColumn="dataEvento">Data <p-sortIcon field="dataEvento"></p-sortIcon></th>
+                <th pSortableColumn="local">Local <p-sortIcon field="local"></p-sortIcon></th>
+                <th pSortableColumn="capacidade">Capacidade <p-sortIcon field="capacidade"></p-sortIcon></th>
+                <th pSortableColumn="vagasDisponiveis">Vagas <p-sortIcon field="vagasDisponiveis"></p-sortIcon></th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-evento>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="evento"></p-tableCheckbox>
+                </td>
+                <td>{{evento.nome}}</td>
+                <td>{{evento.dataEvento | date:'dd/MM/yyyy HH:mm'}}</td>
+                <td>{{evento.local}}</td>
+                <td>{{evento.capacidade}}</td>
+                <td>
+                    <span [class]="'event-badge status-' + (evento.vagasDisponiveis > 0 ? 'instock' : 'outofstock')">{{evento.vagasDisponiveis}}</span>
+                </td>
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="success" (onClick)="editEvento(evento)"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger" (onClick)="deleteEvento(evento)"></p-button>
+                </td>
+            </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="eventoDialog" [style]="{width: '450px'}" header="Detalhes do Evento" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="nome">Nome</label>
+            <input type="text" pInputText id="nome" [(ngModel)]="evento.nome" required autofocus />
+            <small class="p-error" *ngIf="submitted && !evento.nome">Nome é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="dataEvento">Data e Hora</label>
+            <!-- Calendar usa Date, API usa string ISO. Vamos tratar no TS -->
+            <p-calendar id="dataEvento" [(ngModel)]="dataEventoDate" [showTime]="true" [showIcon]="true" appendTo="body" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+        <div class="field">
+            <label for="local">Local</label>
+            <input type="text" pInputText id="local" [(ngModel)]="evento.local" required />
+        </div>
+        <div class="field">
+            <label for="capacidade">Capacidade</label>
+            <p-inputNumber id="capacidade" [(ngModel)]="evento.capacidade" required></p-inputNumber>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" [text]="true" (onClick)="hideDialog()"></p-button>
+        <p-button label="Salvar" icon="pi pi-check" [text]="true" (onClick)="saveEvento()"></p-button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
