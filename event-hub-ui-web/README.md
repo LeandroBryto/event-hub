@@ -1,27 +1,59 @@
-# EventHubUiWeb
+# Event Hub Web
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Interface web moderna e responsiva para o sistema Event Hub. Desenvolvida com **Angular 17**, utiliza os recursos mais recentes do framework para oferecer uma experiência de usuário fluida e performática.
 
-## Development server
+##  Stack Tecnológica
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular 17**: Framework Frontend (Standalone Components).
+- **PrimeNG**: Biblioteca de componentes UI (Tabelas, Modais, Calendários).
+- **TypeScript**: Tipagem estática e segurança no código.
+- **RxJS**: Programação reativa para integração com a API.
+- **SASS (SCSS)**: Estilização modular.
 
-## Code scaffolding
+## Funcionalidades
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Catálogo de Eventos (Público)
+- Visualização de eventos disponíveis em formato de cards.
+- Indicadores visuais de capacidade e data.
+- Integração direta com o fluxo de compra.
 
-## Build
+### Administração (Área Restrita)
+- **Data Table**: Grid avançado para gestão de eventos.
+- **CRUD**: Formulários modais para criar e editar eventos.
+- **Validação Visual**: Feedback imediato para campos obrigatórios ou inválidos.
+- **Formatação**: Tratamento de datas e valores monetários seguindo o padrão brasileiro (pt-BR).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Compra de Ingressos
+- Fluxo simplificado em modal.
+- Validação de e-mail e nome.
+- Feedback de sucesso ou erro (ex: ingressos esgotados) via Toast notifications.
 
-## Running unit tests
+## Arquitetura e Padrões
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Standalone Components**: O projeto não utiliza `AppModule`, adotando a abordagem modular moderna do Angular.
+- **Services**: Lógica de comunicação com a API isolada em serviços (`EventoService`, `IngressoService`).
+- **Interceptors**: `AuthInterceptor` injeta automaticamente o token Basic Auth nas requisições administrativas.
+- **Environments**: Configuração de URL da API separada por ambiente (dev/prod).
 
-## Running end-to-end tests
+##  Como Executar
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Pré-requisitos
+- Node.js (v18 ou superior)
+- Angular CLI (`npm install -g @angular/cli`)
 
-## Further help
+### Instalação e Execução
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. Instale as dependências do projeto:
+   ```bash
+   npm install
+   ```
+
+2. Execute o servidor de desenvolvimento:
+   ```bash
+   ng serve
+   ```
+
+3. Acesse a aplicação:
+   > **http://localhost:4200**
+
+A aplicação tentará se conectar à API em `http://localhost:8080`. Certifique-se de que o backend esteja rodando.
