@@ -68,7 +68,13 @@ export class EventoListComponent implements OnInit {
 
     this.ingressoService.comprar(compra).subscribe({
       next: (ingresso) => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: `Ingresso comprado! Código: ${ingresso.codigo}` });
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Compra Realizada!', 
+          detail: `Ingresso ${ingresso.codigo} garantido! Enviamos a confirmação para ${this.emailParticipante}.`,
+          life: 5000 
+        });
+
         this.displayCompraDialog = false;
         this.loadingCompra = false;
         this.carregarEventos(); 
