@@ -7,5 +7,6 @@ export const routes: Routes = [
   { path: '', redirectTo: 'eventos', pathMatch: 'full' },
   { path: 'eventos', component: EventoListComponent },
   { path: 'admin', component: EventoAdminComponent },
-  { path: 'meus-ingressos', component: MeusIngressosComponent }
+  { path: 'meus-ingressos', component: MeusIngressosComponent },
+  { path: '**', redirectTo: 'eventos' }
 ];
