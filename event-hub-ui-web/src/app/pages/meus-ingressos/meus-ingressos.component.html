@@ -1,0 +1,47 @@
+<div class="card">
+    <h2 class="mb-4">Meus Ingressos</h2>
+    
+    <div class="flex flex-column md:flex-row gap-3 mb-5 align-items-end">
+        <div class="flex-grow-1">
+            <label for="email" class="block font-bold mb-2">Digite seu e-mail de compra</label>
+            <input pInputText id="email" [(ngModel)]="email" class="w-full" placeholder="seu@email.com" (keyup.enter)="buscarIngressos()" />
+        </div>
+        <p-button label="Buscar Ingressos" icon="pi pi-search" (onClick)="buscarIngressos()" [loading]="loading"></p-button>
+    </div>
+
+    <div *ngIf="buscou && ingressos.length === 0" class="text-center p-5 surface-card shadow-1 border-round">
+        <i class="pi pi-info-circle text-4xl text-blue-500 mb-3"></i>
+        <div class="text-xl font-medium text-900">Nenhum ingresso encontrado para este e-mail.</div>
+    </div>
+
+    <div *ngIf="ingressos.length > 0" class="grid">
+        <div *ngFor="let ingresso of ingressos" class="col-12 md:col-6 lg:col-4">
+            <div class="surface-card shadow-2 p-0 border-round overflow-hidden">
+                <div class="bg-primary p-3 flex justify-content-between align-items-center">
+                    <span class="font-bold text-white text-xl">Ingresso</span>
+                    <i class="pi pi-ticket text-white text-2xl"></i>
+                </div>
+                <div class="p-3">
+                    <div class="mb-3">
+                        <span class="text-500 block mb-1">Evento</span>
+                        <span class="text-xl font-bold text-900">{{ ingresso.nomeEvento }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-500 block mb-1">Participante</span>
+                        <span class="text-900">{{ ingresso.nomeParticipante }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-500 block mb-1">Data do Evento</span>
+                        <span class="text-900">{{ ingresso.dataEvento | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </div>
+                    <div class="border-top-1 surface-border pt-3 flex flex-column align-items-center">
+                        <span class="text-500 text-sm mb-2">CÓDIGO DE VALIDAÇÃO</span>
+                        <div class="bg-gray-100 p-2 border-round text-2xl font-mono font-bold text-center w-full">
+                            {{ ingresso.codigo }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
