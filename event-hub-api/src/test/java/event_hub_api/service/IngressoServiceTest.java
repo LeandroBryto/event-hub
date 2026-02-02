@@ -62,7 +62,7 @@ class IngressoServiceTest {
         IngressoResponseDTO resultado = ingressoService.realizarCompra(dto);
 
         assertNotNull(resultado);
-        assertEquals(9, evento.getVagasDisponiveis()); // Verificamos se decrementou
+        assertEquals(9, evento.getVagasDisponiveis());
         verify(eventoRepository, times(1)).save(evento);
         verify(ingressoRepository, times(1)).save(any());
     }

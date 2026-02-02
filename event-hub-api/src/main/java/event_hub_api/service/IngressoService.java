@@ -67,7 +67,7 @@ public class IngressoService {
 
         IngressoEntity salvo = ingressoRepository.save(ingresso);
 
-        log.info("[INTEGRAÇÃO] Enviando e-mail de confirmação para: {}", participante.getEmail());
+        log.info("Enviando e-mail de confirmação para: {}", participante.getEmail());
 
         return toDTO(salvo);
     }
