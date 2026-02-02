@@ -1,0 +1,51 @@
+<div class="card">
+    <h2 class="mb-4">Próximos Eventos</h2>
+    
+    <div class="grid">
+        <div *ngFor="let evento of eventos" class="col-12 md:col-6 lg:col-4">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">{{ evento.dataEvento | date:'dd/MM/yyyy HH:mm' }}</span>
+                        <div class="text-900 font-medium text-xl">{{ evento.nome }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-calendar text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="text-green-500 font-medium">{{ evento.vagasDisponiveis }}</span>
+                    <span class="text-500"> vagas disponíveis</span>
+                    <div class="text-500 mt-1"><i class="pi pi-map-marker mr-1"></i>{{ evento.local }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-end">
+                    <button pButton label="Comprar Ingresso" icon="pi pi-ticket" 
+                        [disabled]="(evento.vagasDisponiveis || 0) <= 0" 
+                        (click)="abrirCompra(evento)"></button>
+                </div>
+            </div>
+        </div>
+        
+        <div *ngIf="eventos.length === 0" class="col-12 text-center p-5">
+            <span class="text-500 text-xl">Nenhum evento disponível no momento.</span>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="displayCompraDialog" [header]="'Comprar Ingresso: ' + selectedEvento?.nome" [modal]="true" [style]="{width: '450px'}">
+    <div class="flex flex-column gap-3 pt-3">
+        <div class="field">
+            <label for="nome" class="block font-bold mb-2">Seu Nome</label>
+            <input pInputText id="nome" [(ngModel)]="nomeParticipante" class="w-full" placeholder="Ex: João da Silva" />
+        </div>
+        <div class="field">
+            <label for="email" class="block font-bold mb-2">Seu E-mail</label>
+            <input pInputText id="email" [(ngModel)]="emailParticipante" class="w-full" placeholder="Ex: joao@email.com" />
+            <small class="block text-500 mt-1">O código do ingresso será vinculado a este e-mail.</small>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" [text]="true" (onClick)="displayCompraDialog = false"></p-button>
+        <p-button label="Confirmar Compra" icon="pi pi-check" (onClick)="confirmarCompra()" [loading]="loadingCompra"></p-button>
+    </ng-template>
+</p-dialog>
